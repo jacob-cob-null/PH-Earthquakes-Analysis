@@ -1,0 +1,8 @@
+kagglehub
+numpy
+pandas
+matplotlib
+seaborn
+geopandas
+jupyterlab
+ipykernel
