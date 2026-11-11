@@ -94,9 +94,9 @@ Or run `./run_dashboard.ps1` in PowerShell; it prepares a local environment if n
 
 The app finds the original version-74 Kaggle cache locally. On another machine, upload the original USGS-format CSV in **Data source**, set `EARTHQUAKE_CSV` to its path, place it at `data/Philippine_Earthquakes_USGS.csv`, or use **Download pinned Kaggle version 74**. Downloads are explicit; the app does not silently switch to the latest catalog.
 
-Keep `data/reference/arcgis_active_fault_trenches.geojson` and its `.source.json` together to show tectonic overlays. Missing/unverified geometry produces a visible warning. The existing `.gitignore` excludes reference files and outputs; include attributed copies separately when sharing/deploying. Matching notebook profile memberships are reused when available; otherwise the app fits the same GMM procedure. Full notebook robustness tables are shown only with matching training records. Profile filters change the view of a fixed full-catalog model; spatial clustering and anomaly review refit the filtered subset.
+Keep `data/reference/arcgis_active_fault_trenches.geojson` and its `.source.json` together to show tectonic overlays. Missing/unverified geometry produces a visible warning. The tectonic GeoJSON and its provenance JSON are tracked deployment assets, explicitly allowed by `.gitignore`, so Streamlit Cloud receives the same validated snapshot as local runs. Other reference files and generated outputs remain ignored. Matching notebook profile memberships are reused when available; otherwise the app fits the same GMM procedure. Full notebook robustness tables are shown only with matching training records. Profile filters change the view of a fixed full-catalog model; spatial clustering and anomaly review refit the filtered subset.
 
-Maps need online Leaflet/OpenStreetMap assets. Plotly charts and the saved static notebook figures remain useful without map tiles. No publication or hosting is configured.
+Maps need online Leaflet/OpenStreetMap assets. Plotly charts and the saved static notebook figures remain useful without map tiles. For Streamlit Cloud, deploy `streamlit_app.py` from the repository; the tectonic overlays load from the included snapshot without a runtime ArcGIS request.
 
 
 ### Q1–Q4 figure coverage in Streamlit
