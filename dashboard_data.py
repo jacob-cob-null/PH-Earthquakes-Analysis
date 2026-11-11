@@ -1,7 +1,7 @@
 """Data, provenance and rendering helpers for the earthquake dashboard."""
 from pathlib import Path
 from io import BytesIO
-import os, json, html
+import os, json, html, hashlib
 import numpy as np
 import pandas as pd
 import geopandas as gpd
@@ -122,7 +122,7 @@ class CanvasPoints(MacroElement):
         {% endmacro %}''')
 
 @st.cache_data(show_spinner=False,max_entries=12)
-def build_map(d,mode='Heat',tectonic_visible=True,size_km=50,smoothing=16,color_field=None,view_bounds=None,sea_labels=False,point_color=None,point_radius=3,point_opacity=.55):
+def _build_map(d,mode='Heat',tectonic_visible=True,size_km=50,smoothing=16,color_field=None,view_bounds=None,sea_labels=False,point_color=None,point_radius=3,point_opacity=.55,tectonic_revision=''):
     d=geographic(d)
     m=folium.Map(location=[12.4,123.5],zoom_start=5,tiles=None,prefer_canvas=True,control_scale=True)
     folium.TileLayer('OpenStreetMap',name='OpenStreetMap',opacity=.55,control=False).add_to(m)
@@ -174,3 +174,14 @@ def build_map(d,mode='Heat',tectonic_visible=True,size_km=50,smoothing=16,color_
             folium.Marker([lat,lon],icon=folium.DivIcon(html=f'<span style="color:#174c6d;font:italic 12px Arial;white-space:nowrap;text-shadow:0 0 3px white">{label}</span>',icon_size=(110,18),icon_anchor=(55,9))).add_to(m)
     folium.LayerControl(collapsed=False).add_to(m)
     return m.get_root().render()
+
+
+def build_map(*args, **kwargs):
+    """Invalidate rendered maps when tectonic assets arrive or change on deployment."""
+    revision=[]
+    for filename in ['arcgis_active_fault_trenches.geojson','arcgis_active_fault_trenches.source.json']:
+        try:
+            revision.append(hashlib.sha256((ROOT/'data/reference'/filename).read_bytes()).hexdigest())
+        except OSError:
+            revision.append('unavailable')
+    return _build_map(*args, **kwargs, tectonic_revision=tuple(revision))
