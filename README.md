@@ -80,3 +80,25 @@ remains optional. Share source/provenance files or rerun acquisition on Colab.
 Find **ML extension — Do similar earthquakes occur in similar places?** before Appendix A. Run the notebook from the top. It fits magnitude–depth Gaussian mixtures on one reported magnitude scale, maps the profiles, and checks sensitivity to seeds, depth transformation, and repeated catalog depths. The model can select one component. Write your own observations in the supplied prompts.
 
 Static presentation figures: `outputs/ml_profile_characteristics.png`, `outputs/ml_profile_geography.png`, and `outputs/ml_profile_challenge.png`. Model selection, memberships/probabilities, subset audit, summaries, depth-category comparison, and robustness checks are saved as `outputs/ml_profile_*.csv`. BIC values are comparable only within the same variant. All maps retain the project's provisional tectonic attribution.
+
+
+## Interactive Streamlit dashboard
+
+From this project folder, install `requirements.txt`, then run:
+
+```powershell
+.\.venv\Scripts\python.exe -m streamlit run streamlit_app.py
+```
+
+Or run `./run_dashboard.ps1` in PowerShell; it prepares a local environment if needed. Open the localhost URL printed in the terminal. The dashboard includes maps/heat/exact grids, timelines, magnitude/depth distributions with lasso selection, tsunami flags, GMM profiles with linked maps, spatial clustering sensitivity, anomaly review, and a source/quality page. Sidebar filters apply across views. Plotly charts provide hover/zoom and PNG export; maps provide layer toggles and HTML downloads.
+
+The app finds the original version-74 Kaggle cache locally. On another machine, upload the original USGS-format CSV in **Data source**, set `EARTHQUAKE_CSV` to its path, place it at `data/Philippine_Earthquakes_USGS.csv`, or use **Download pinned Kaggle version 74**. Downloads are explicit; the app does not silently switch to the latest catalog.
+
+Keep `data/reference/arcgis_active_fault_trenches.geojson` and its `.source.json` together to show tectonic overlays. Missing/unverified geometry produces a visible warning. The existing `.gitignore` excludes reference files and outputs; include attributed copies separately when sharing/deploying. Matching notebook profile memberships are reused when available; otherwise the app fits the same GMM procedure. Full notebook robustness tables are shown only with matching training records. Profile filters change the view of a fixed full-catalog model; spatial clustering and anomaly review refit the filtered subset.
+
+Maps need online Leaflet/OpenStreetMap assets. Plotly charts and the saved static notebook figures remain useful without map tiles. No publication or hosting is configured.
+
+
+### Q1–Q4 figure coverage in Streamlit
+
+The dashboard uses a compact Q1–Q4 navigation with no presentation takeaways. Q1 includes heat, exact equal-area counts and top cells, epicenters, a tectonic reference-only mode, paired magnitude/depth maps, and equal-span northern/southern close-ups. Q2 compares M ≥ 6 and M ≥ 7 simultaneously, shades potentially partial boundary periods, and retains an all-record calendar. Q3 includes matched-bin magnitude histograms with/without zero values, depth distribution, the selectable magnitude–depth scatter, depth categories, frequent reported depths, and the notebook's Spearman comparisons. Q4 uses two maps with the same initial extent and marker size, sea labels, actual coverage, and annual flagged-record counts. Short encoding/source captions remain; interpretations are left for the report.

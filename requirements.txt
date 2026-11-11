@@ -9,3 +9,6 @@ ipykernel
 
 folium
 scikit-learn
+
+streamlit>=1.67,<2
+plotly>=6,<8
