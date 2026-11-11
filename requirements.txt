@@ -6,3 +6,6 @@ seaborn
 geopandas
 jupyterlab
 ipykernel
+
+folium
+scikit-learn
