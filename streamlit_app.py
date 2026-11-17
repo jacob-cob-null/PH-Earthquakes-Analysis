@@ -104,11 +104,11 @@ with st.sidebar:
         uploaded=st.file_uploader('Use a USGS-format catalog CSV',type='csv')
         located=find_catalog()
         if located:st.caption('Local source: '+str(located))
-        if st.button('Download pinned Kaggle version 74'):
+        if st.button('Download Kaggle catalog (latest)'):
             import kagglehub
-            with st.spinner('Downloading catalog version 74…'):
+            with st.spinner('Downloading catalog from Kaggle…'):
                 try:
-                    folder=Path(kagglehub.dataset_download('bwandowando/philippine-earthquakes-1900-2025-from-usgs/versions/74'))
+                    folder=Path(kagglehub.dataset_download('bwandowando/philippine-earthquakes-1900-2025-from-usgs'))
                     st.session_state['downloaded_catalog']=str(next(folder.rglob('*.csv')))
                 except Exception as error:
                     st.error('Catalog download failed. You can upload the CSV instead. '+str(error))

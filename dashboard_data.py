@@ -46,8 +46,11 @@ def find_catalog():
     if override:return Path(override)
     local=ROOT/'data'/'Philippine_Earthquakes_USGS.csv'
     if local.exists():return local
-    pinned=Path.home()/'.cache/kagglehub/datasets/bwandowando/philippine-earthquakes-1900-2025-from-usgs/versions/74/Philippine_Earthquakes_USGS.csv'
-    return pinned if pinned.exists() else None
+    cache_root=Path.home()/'.cache/kagglehub/datasets/bwandowando/philippine-earthquakes-1900-2025-from-usgs/versions'
+    pinned=cache_root/'74'/'Philippine_Earthquakes_USGS.csv'
+    if pinned.exists():return pinned
+    cached=sorted(cache_root.glob('*/Philippine_Earthquakes_USGS.csv'),key=lambda p:int(p.parent.name) if p.parent.name.isdigit() else -1,reverse=True)
+    return cached[0] if cached else None
 
 def geographic(d):
     return d.loc[d.latitude.between(-90,90)&d.longitude.between(-180,180)].copy()
